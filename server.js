@@ -286,10 +286,7 @@ app.get('/api/health', (req, res) => {
 // Connect to MongoDB
 async function connectToDatabase() {
     try {
-        await mongoose.connect(uri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(uri); // ✅ Simplified - removes warnings
         console.log('✅ Connected to MongoDB Atlas successfully!');
     } catch (error) {
         console.error('❌ MongoDB connection error:', error);
