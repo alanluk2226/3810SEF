@@ -1,7 +1,3 @@
-//How to link to mongodb lab06
-//Link to ejs lab07
-
-
 // Load required modules
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -9,41 +5,17 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
+// Import User model
+const User = require('./models/User'); // Adjust path if needed
+
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({ extended: true })); // Added for form data
+app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
 const uri = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_user?retryWrites=true&w=majority';
 const PORT = 8099; 
-
-// User Schema
-const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        minlength: 3,
-        maxlength: 30
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 6
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true
-    }
-});
-
-// Create User model
-const User = mongoose.model('User', userSchema);
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -121,7 +93,8 @@ app.post('/api/signup', async (req, res) => {
             user: {
                 id: newUser._id,
                 username: newUser.username,
-                email: newUser.email
+                email: newUser.email,
+                joinDate: newUser.joinDate
             }
         });
 
@@ -134,7 +107,7 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
-// Login Route (you'll need to implement this)
+// Login Route
 app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -163,7 +136,8 @@ app.post('/api/login', async (req, res) => {
             user: {
                 id: user._id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                joinDate: user.joinDate
             }
         });
         
@@ -212,7 +186,7 @@ async function connectToDatabase() {
         console.log('✅ Connected to MongoDB Atlas successfully!');
     } catch (error) {
         console.error('❌ MongoDB connection error:', error);
-        process.exit(1); // Exit if cannot connect to database
+        process.exit(1);
     }
 }
 
