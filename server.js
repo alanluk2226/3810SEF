@@ -1,17 +1,31 @@
 // Load required modules
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
 const express = require('express');
+const session = require('express-session'); // Added for session management (npm install express-session) in logout method1
+
 const app = express();
 
 // Import User model
-const User = require('./models/User'); // Adjust path if needed
+const User = require('./models/User');
 
 // Middleware
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+
+// Session middleware (required for authentication)
+app.use(session({
+    secret: 'your-secret-key', // Change this to a random string
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: false, // Set to true if using HTTPS
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
 
 // MongoDB connection
 const uri = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_user?retryWrites=true&w=majority';
@@ -20,41 +34,105 @@ const PORT = 8099;
 // Set view engine
 app.set('view engine', 'ejs');
 
-// Routes (total 7)
+// Simple authentication middleware (optional)
+const requireAuth = (req, res, next) => {
+    if (req.session.user) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+};
+
+// Routes
 // Link to index page
 app.get("/", (req, res) => {
-    res.status(200).render('index', { title: "Home page" });
+    res.status(200).render('index', { 
+        title: "Home page",
+        user: req.session.user || null 
+    });
 });
 
-// Link to create page
-app.get("/create", (req, res) => {
-    res.status(200).render('create', { title: "Create page" });
+// Link to create page (protected example)
+app.get("/create", requireAuth, (req, res) => {
+    res.status(200).render('create', { 
+        title: "Create page",
+        user: req.session.user 
+    });
 });
 
 // Link to read page
 app.get("/read", (req, res) => {
-    res.status(200).render('read', { title: "Read page" });
+    res.status(200).render('read', { 
+        title: "Read page",
+        user: req.session.user || null 
+    });
 });
 
 // Link to update page
 app.get("/update", (req, res) => {
-    res.status(200).render('update', { title: "Update page" });
+    res.status(200).render('update', { 
+        title: "Update page",
+        user: req.session.user || null 
+    });
 });
 
 // Link to delete page
 app.get("/delete", (req, res) => {
-    res.status(200).render('delete', { title: "Delete page" });
+    res.status(200).render('delete', { 
+        title: "Delete page",
+        user: req.session.user || null 
+    });
 });
 
 // Link to login page
 app.get("/login", (req, res) => {
+    // If already logged in, redirect to home
+    if (req.session.user) {
+        return res.redirect('/');
+    }
     res.status(200).render('login', { title: "Login page" });
 });
 
 // Link to register page
 app.get("/register", (req, res) => {
+    // If already logged in, redirect to home
+    if (req.session.user) {
+        return res.redirect('/');
+    }
     res.status(200).render('register', { title: "Register page" });
 });
+
+
+
+
+// Logout route with express-session to track logged-in users
+/* Method1
+app.get("/logout", (req, res) => {
+    // Destroy the session
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Logout error:', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Logout failed' 
+            });
+        }
+        
+        // Clear the session cookie
+        res.clearCookie('connect.sid');
+        
+        // Redirect to home page or login page
+        res.redirect('/');
+    });
+});
+*/
+
+// Simple logout without sessions
+//Method2
+app.get("/logout", (req, res) => {
+    res.redirect('/login?message=Logged out successfully');
+});
+
 
 // Signup Route
 app.post('/api/signup', async (req, res) => {
@@ -87,6 +165,13 @@ app.post('/api/signup', async (req, res) => {
         // Save user to database
         await newUser.save();
 
+        // Automatically log in user after signup (optional)
+        req.session.user = {
+            id: newUser._id,
+            username: newUser.username,
+            email: newUser.email
+        };
+
         res.status(201).json({
             success: true,
             message: 'User created successfully!',
@@ -107,7 +192,7 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
-// Login Route
+// Login Route - UPDATED with session
 app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -130,6 +215,13 @@ app.post('/api/login', async (req, res) => {
             });
         }
         
+        // Create session
+        req.session.user = {
+            id: user._id,
+            username: user.username,
+            email: user.email
+        };
+        
         res.json({
             success: true,
             message: 'Login successful!',
@@ -150,10 +242,25 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Get current user route
+app.get('/api/current-user', (req, res) => {
+    if (req.session.user) {
+        res.json({
+            success: true,
+            user: req.session.user
+        });
+    } else {
+        res.json({
+            success: false,
+            message: 'No user logged in'
+        });
+    }
+});
+
 // Get all users route (for testing)
 app.get('/api/users', async (req, res) => {
     try {
-        const users = await User.find({}, { password: 0 }); // Exclude passwords
+        const users = await User.find({}, { password: 0 });
         res.json({
             success: true,
             users: users
