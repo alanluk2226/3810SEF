@@ -1,20 +1,20 @@
-// Load required modules
-
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const cors = require('cors');
-const express = require('express');
-const session = require('express-session'); // Added for session management (npm install express-session) in logout method1
+const mongoose = require('mongoose'); // ODM -- MongoDB && Node.js
+const bcrypt = require('bcryptjs'); // hashing && verifying pwd
+const cors = require('cors'); // enable communication between frontend && backend
+const express = require('express'); //
+const session = require('express-session'); // Middleware for managing session in Express
 
 const app = express();
 
 // Import User model
-const User = require('./models/User');
+import User from "./models/User.js";
+import Workout from "./models/Workout.js";
+
 
 // Middleware
 app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended : true}));
 
 // Session middleware (required for authentication)
 app.use(session({
@@ -28,8 +28,8 @@ app.use(session({
 }));
 
 // MongoDB connection
-const uri = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_user?retryWrites=true&w=majority';
-const PORT = 8099; 
+const url = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_user?retryWrites=true&w=majority';
+const PORT = 8099;
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -101,9 +101,6 @@ app.get("/register", (req, res) => {
     }
     res.status(200).render('register', { title: "Register page" });
 });
-
-
-
 
 // Logout route with express-session to track logged-in users
 /* Method1
@@ -281,6 +278,122 @@ app.get('/api/health', (req, res) => {
         message: 'Fitness Workout Tracker API is running!',
         timestamp: new Date().toISOString()
     });
+});
+
+// Create (CRUD) workout
+app.post('/api/workouts', requireAuth, async (req, res) => {
+    // Validate input
+    if (!req.body.title) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Title is required' 
+            });
+        }
+    try {
+        const workout = new Workout({
+            ...req.body, 
+            user: req.session.user.id 
+        });
+        await workout.save();
+        res.status(201).json({ 
+            success: true,
+            workout 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            error: "server error"
+        });
+    }
+});
+
+// Read (CRUD) workout --- for the logged-in user to find out all the workout schedule 
+app.get('/api/workouts', requireAuth, async (req, res) => {
+    try {
+        const workouts = await Workout.find({ 
+            user: req.session.user.id 
+        });
+        res.json({ 
+            success: true, 
+            workouts 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            error: "server error"
+        });
+    }
+});
+
+// Read One (CRUD) workout
+app.get('/api/workouts/:id', requireAuth, async (req, res) => {
+    try {
+        const workout = await Workout.findOne({ 
+            _id: req.params.id, 
+            user: req.session.user.id 
+        });
+        if (!workout) return res.status(404).json({ 
+            success: false, 
+            error: 'Workout schedule not found' 
+        });
+        res.json({ 
+            success: true, 
+            workout 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            error: "server error"
+        });
+    }
+});
+
+// Update (CRUD) workout
+app.put('/api/workouts/:id', requireAuth, async (req, res) => {
+    try {
+        const workout = await Workout.findOneAndUpdate({ 
+            _id: req.params.id, 
+            user: req.session.user.id },
+            req.body,
+            { new: true }
+        );
+        if (!workout) return res.status(404).json({ 
+            success: false, 
+            error: 'Workout schedule not found' 
+        });
+        res.json({ 
+            success: true, 
+            workout 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            error: "server error"
+        });
+    }
+});
+
+// Delete (CRUD) workout
+app.delete('/api/workouts/:id', requireAuth, async (req, res) => {
+    try {
+        const workout = await Workout.findOneAndDelete({ 
+            _id: req.params.id, 
+            user: req.session.user.id 
+        });
+        if (!workout) return res.status(404).json({ 
+            success: false, 
+            error: 'Workout schedule not found' 
+        });
+        res.json({ 
+            success: true, 
+            message: 'Workout schedule deleted' 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            error: "server error"
+        });
+    }
 });
 
 // Connect to MongoDB
