@@ -28,7 +28,7 @@ app.use(session({
 }));
 
 // MongoDB connection
-const url = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_user?retryWrites=true&w=majority';
+const url = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_user?retryWrites=true&w=majority'; //username: alanluk password:projectTesting 
 const PORT = 8099;
 
 // Set view engine
@@ -413,3 +413,4 @@ app.listen(PORT, async () => {
     console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
     await connectToDatabase();
 });
+
