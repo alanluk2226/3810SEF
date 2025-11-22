@@ -1,1 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Fitness App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">🏋️ Fitness Tracker</div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/create" class="nav-link">Create Workout</a>
+                <a href="/read" class="nav-link">My Workouts</a>
+                <% if (user) { %>
+                    <div class="user-info">
+                        <span>Welcome, <%= user.username %>!</span>
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Login</a>
+                <% } %>
+            </div>
+        </nav>
 
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Delete Workout 🗑️</h1>
+                <p>Select a workout to delete</p>
+            </div>
+
+            <div class="card-body">
+                <!-- Warning Section -->
+                <div class="delete-warning">
+                    <div class="delete-warning-icon">⚠️</div>
+                    <h2>Caution: Irreversible Action</h2>
+                    <p>Deleted workouts cannot be recovered. Please make sure you want to delete a workout before proceeding.</p>
+                </div>
+
+                <!-- Workouts List -->
+                <div id="workoutsList">
+                    <div class="loading-state-delete">
+                        <p>Loading your workouts...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="delete-modal">
+        <div class="delete-modal-content">
+            <div class="delete-modal-header">
+                <div class="delete-modal-icon">🗑️</div>
+                <h3 class="delete-modal-title">Confirm Deletion</h3>
+                <p class="delete-modal-message">Are you sure you want to delete this workout? This action cannot be undone.</p>
+            </div>
+            
+            <div class="delete-modal-workout-info">
+                <div class="delete-modal-workout-details" id="modalWorkoutDetails">
+                    <!-- Workout details will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="delete-modal-actions">
+                <button class="delete-modal-btn delete-modal-btn-cancel" onclick="closeDeleteModal()">
+                    Cancel
+                </button>
+                <button class="delete-modal-btn delete-modal-btn-confirm" onclick="proceedWithDeletion()">
+                    Delete Forever
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allWorkouts = [];
+        let currentWorkoutToDelete = null;
+
+        // Load workout data
+        async function loadWorkouts() {
+            try {
+                const response = await fetch('/api/workouts');
+                const data = await response.json();
+                
+                if (data.success) {
+                    allWorkouts = data.workouts;
+                    displayWorkoutsForDeletion(data.workouts);
+                } else {
+                    throw new Error(data.error || 'Failed to load workouts');
+                }
+            } catch (error) {
+                console.error('Error loading workouts:', error);
+                document.getElementById('workoutsList').innerHTML = `
+                    <div class="error-state">
+                        Error loading workouts. Please try again.
+                    </div>
+                `;
+            }
+        }
+
+        // Display workouts for deletion
+        function displayWorkoutsForDeletion(workouts) {
+            const container = document.getElementById('workoutsList');
+            
+            if (workouts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state-delete">
+                        <h3>No workouts found</h3>
+                        <p>You don't have any workouts to delete.</p>
+                        <a href="/create" class="btn btn-primary">Create Your First Workout</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = workouts.map(workout => `
+                <div class="workout-card delete-mode" id="workout-${workout._id}">
+                    <div class="workout-header">
+                        <div class="workout-title">
+                            ${workout.exerciseName}
+                            <span class="exercise-type-badge">${workout.exerciseType}</span>
+                        </div>
+                        <div class="workout-actions">
+                            <button onclick="openDeleteModal('${workout._id}')" 
+                                    class="btn-delete-enhanced">
+                                <span>🗑️</span>
+                                Delete Workout
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="workout-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Date</span>
+                            <span>${new Date(workout.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Duration</span>
+                            <span>${workout.duration} mins</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Calories</span>
+                            <span>${workout.caloriesBurned}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Intensity</span>
+                            <span class="intensity-${workout.intensity}" style="text-transform: capitalize;">
+                                ${workout.intensity}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    ${workout.notes ? `
+                    <div class="workout-notes">
+                        <strong>Notes:</strong> ${workout.notes}
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Open delete confirmation modal
+        function openDeleteModal(workoutId) {
+            const workout = allWorkouts.find(w => w._id === workoutId);
+            if (!workout) return;
+
+            currentWorkoutToDelete = workoutId;
+
+            // Populate modal with workout details
+            document.getElementById('modalWorkoutDetails').innerHTML = `
+                <div class="delete-modal-detail">
+                    <div class="delete-modal-detail-label">Exercise</div>
+                    <div class="delete-modal-detail-value">${workout.exerciseName}</div>
+                </div>
+                <div class="delete-modal-detail">
+                    <div class="delete-modal-detail-label">Type</div>
+                    <div class="delete-modal-detail-value">${workout.exerciseType}</div>
+                </div>
+                <div class="delete-modal-detail">
+                    <div class="delete-modal-detail-label">Date</div>
+                    <div class="delete-modal-detail-value">${new Date(workout.date).toLocaleDateString()}</div>
+                </div>
+                <div class="delete-modal-detail">
+                    <div class="delete-modal-detail-label">Duration</div>
+                    <div class="delete-modal-detail-value">${workout.duration} mins</div>
+                </div>
+            `;
+
+            // Show modal
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        // Close delete modal
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentWorkoutToDelete = null;
+        }
+
+        // Proceed with deletion
+        async function proceedWithDeletion() {
+            if (!currentWorkoutToDelete) return;
+
+            const workoutCard = document.getElementById(`workout-${currentWorkoutToDelete}`);
+            if (workoutCard) {
+                workoutCard.classList.add('deleting');
+            }
+
+            try {
+                const response = await fetch(`/api/workouts/${currentWorkoutToDelete}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Show success message
+                    const workoutsList = document.getElementById('workoutsList');
+                    workoutsList.innerHTML = `
+                        <div class="success-message-delete">
+                            <h3>✅ Workout Deleted Successfully!</h3>
+                            <p>The workout has been permanently removed from your history.</p>
+                        </div>
+                    `;
+                    
+                    // Reload workouts after a short delay
+                    setTimeout(() => {
+                        loadWorkouts();
+                        closeDeleteModal();
+                    }, 2000);
+                } else {
+                    alert('Error deleting workout: ' + (data.error || 'Unknown error'));
+                    if (workoutCard) {
+                        workoutCard.classList.remove('deleting');
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting workout:', error);
+                alert('Error deleting workout. Please try again.');
+                if (workoutCard) {
+                    workoutCard.classList.remove('deleting');
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteModal();
+            }
+        });
+
+        // Load workouts on page load
+        document.addEventListener('DOMContentLoaded', loadWorkouts);
+    </script>
+</body>
+</html>
