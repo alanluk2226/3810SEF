@@ -1,1 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Fitness App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">🏋️ Fitness Tracker</div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/read" class="nav-link">My Workouts</a>
+                <% if (user) { %>
+                    <div class="user-info">
+                        <span>Welcome, <%= user.username %>!</span>
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Login</a>
+                <% } %>
+            </div>
+        </nav>
 
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Create New Workout 💪</h1>
+                <p>Log your exercise and track your progress</p>
+            </div>
+
+            <div class="card-body">
+                <form id="workoutForm">
+                    <!-- Basic Information -->
+                    <div class="form-group">
+                        <label class="form-label" for="exerciseName">Exercise Name *</label>
+                        <input type="text" class="form-control" id="exerciseName" name="exerciseName" 
+                               placeholder="e.g., Running, Weightlifting, Yoga..." required>
+                        <div id="exerciseSuggestions" class="autocomplete-items"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="exerciseType">Exercise Type *</label>
+                        <select class="form-control" id="exerciseType" name="exerciseType" required>
+                            <option value="">Select exercise type</option>
+                            <option value="cardio">Cardio</option>
+                            <option value="strength">Strength Training</option>
+                            <option value="flexibility">Flexibility</option>
+                            <option value="balance">Balance</option>
+                            <option value="high-intensity-interval-training">HIIT</option>
+                            <option value="sports">Sports</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Time Information -->
+                    <div class="form-section-header">Time Information</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="date">Date *</label>
+                            <input type="date" class="form-control" id="date" name="date" 
+                                   value="<%= new Date().toISOString().split('T')[0] %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="duration">Duration (minutes) *</label>
+                            <input type="number" class="form-control" id="duration" name="duration" 
+                                   min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="startTime">Start Time *</label>
+                            <input type="time" class="form-control" id="startTime" name="startTime" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="endTime">End Time *</label>
+                            <input type="time" class="form-control" id="endTime" name="endTime" required>
+                        </div>
+                    </div>
+
+                    <!-- Calories and Intensity -->
+                    <div class="form-section-header">Performance Metrics</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="caloriesBurned">Calories Burned *</label>
+                            <input type="number" class="form-control" id="caloriesBurned" name="caloriesBurned" 
+                                   min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="intensity">Intensity</label>
+                            <select class="form-control" id="intensity" name="intensity">
+                                <option value="light">Light</option>
+                                <option value="moderate" selected>Moderate</option>
+                                <option value="vigorous">Vigorous</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Exercise Specific Details -->
+                    <div id="strengthFields" style="display: none;">
+                        <div class="form-section-header">Strength Training Details</div>
+                        <div class="form-grid-3">
+                            <div class="form-group">
+                                <label class="form-label" for="sets">Sets</label>
+                                <input type="number" class="form-control" id="sets" name="sets" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reps">Reps</label>
+                                <input type="number" class="form-control" id="reps" name="reps" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="weight">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cardioFields" style="display: none;">
+                        <div class="form-section-header">Cardio Details</div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="distance">Distance</label>
+                                <input type="number" class="form-control" id="distance" name="distance" min="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="distanceUnit">Unit</label>
+                                <select class="form-control" id="distanceUnit" name="distanceUnit">
+                                    <option value="km">Kilometers</option>
+                                    <option value="miles">Miles</option>
+                                    <option value="meters">Meters</option>
+                                    <option value="yards">Yards</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label class="form-label" for="notes">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                  placeholder="How did you feel? Any achievements or challenges?..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full">
+                        Create Workout
+                    </button>
+                </form>
+
+                <div id="message" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Common exercise suggestions
+        const exerciseSuggestions = [
+            'Running', 'Walking', 'Cycling', 'Swimming', 'Yoga', 'Pilates',
+            'Weightlifting', 'Bodyweight Training', 'Dancing', 'Hiking',
+            'Basketball', 'Football', 'Tennis', 'Boxing', 'Martial Arts',
+            'Rowing', 'Elliptical', 'Stair Climbing', 'Jump Rope', 'Burpees',
+            'Push-ups', 'Pull-ups', 'Squats', 'Deadlifts', 'Bench Press',
+            'Meditation', 'Stretching', 'CrossFit', 'Zumba', 'Spinning'
+        ];
+
+        // Autocomplete functionality
+        document.getElementById('exerciseName').addEventListener('input', function(e) {
+            const input = e.target.value.toLowerCase();
+            const suggestionsContainer = document.getElementById('exerciseSuggestions');
+            suggestionsContainer.innerHTML = '';
+
+            if (input.length > 0) {
+                const filtered = exerciseSuggestions.filter(exercise => 
+                    exercise.toLowerCase().includes(input)
+                ).slice(0, 5);
+
+                filtered.forEach(exercise => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-item';
+                    div.textContent = exercise;
+                    div.addEventListener('click', () => {
+                        document.getElementById('exerciseName').value = exercise;
+                        suggestionsContainer.innerHTML = '';
+                    });
+                    suggestionsContainer.appendChild(div);
+                });
+            }
+        });
+
+        // Show/hide fields based on exercise type
+        document.getElementById('exerciseType').addEventListener('change', function(e) {
+            const type = e.target.value;
+            document.getElementById('strengthFields').style.display = 
+                type === 'strength' ? 'block' : 'none';
+            document.getElementById('cardioFields').style.display = 
+                type === 'cardio' ? 'block' : 'none';
+        });
+
+        // Form submission
+        document.getElementById('workoutForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Basic validation
+            if (!data.exerciseName || !data.exerciseType || !data.date || !data.duration || !data.caloriesBurned) {
+                document.getElementById('message').innerHTML = `
+                    <div class="message-error">
+                        ❌ Please fill in all required fields
+                    </div>
+                `;
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('button');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Creating...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('btn-loading');
+
+            try {
+                const response = await fetch('/api/workouts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('message').innerHTML = `
+                        <div class="message-success">
+                            ✅ Workout created successfully! Redirecting...
+                        </div>
+                    `;
+                    setTimeout(() => {
+                        window.location.href = '/read';
+                    }, 1500);
+                } else {
+                    document.getElementById('message').innerHTML = `
+                        <div class="message-error">
+                            ❌ Error: ${result.error || 'Failed to create workout'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('message').innerHTML = `
+                    <div class="message-error">
+                        ❌ Network error. Please try again.
+                    </div>
+                `;
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-loading');
+            }
+        });
+
+        // Set current time as default start time
+        const now = new Date();
+        const currentTime = now.toTimeString().slice(0, 5);
+        document.getElementById('startTime').value = currentTime;
+
+        // Calculate end time (default 1 hour later)
+        const endTime = new Date(now.getTime() + 60 * 60 * 1000);
+        document.getElementById('endTime').value = endTime.toTimeString().slice(0, 5);
+    </script>
+</body>
+</html>
