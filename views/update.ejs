@@ -107,7 +107,7 @@
             <!-- Edit Form Mode -->
             <% if (mode === 'edit' && workout) { %>
                 <form id="workoutForm">
-                    <!-- 基本資訊 -->
+                    <!-- Basic Information -->
                     <div class="form-group">
                         <label class="form-label" for="exerciseName">Exercise Name *</label>
                         <input type="text" class="form-control" id="exerciseName" name="exerciseName" 
@@ -128,7 +128,7 @@
                         </select>
                     </div>
 
-                    <!-- 時間資訊 -->
+                    <!-- Time Information -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label class="form-label" for="date">Date *</label>
@@ -147,7 +147,7 @@
                         </div>
                     </div>
 
-                    <!-- 卡路里和強度 -->
+                    <!-- Calories and Intensity -->
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label class="form-label" for="caloriesBurned">Calories Burned *</label>
@@ -165,49 +165,7 @@
                         </div>
                     </div>
 
-                    <!-- 運動特定細節 -->
-                    <div id="strengthFields" style="display: <%= workout.exerciseType === 'strength' ? 'block' : 'none' %>;">
-                        <h3 style="margin: 1.5rem 0 1rem 0;">Strength Training Details</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-                            <div class="form-group">
-                                <label class="form-label" for="sets">Sets</label>
-                                <input type="number" class="form-control" id="sets" name="sets" 
-                                       value="<%= workout.sets || '' %>" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="reps">Reps</label>
-                                <input type="number" class="form-control" id="reps" name="reps" 
-                                       value="<%= workout.reps || '' %>" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="weight">Weight (kg)</label>
-                                <input type="number" class="form-control" id="weight" name="weight" 
-                                       value="<%= workout.weight || '' %>" min="0" step="0.1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="cardioFields" style="display: <%= workout.exerciseType === 'cardio' ? 'block' : 'none' %>;">
-                        <h3 style="margin: 1.5rem 0 1rem 0;">Cardio Details</h3>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div class="form-group">
-                                <label class="form-label" for="distance">Distance</label>
-                                <input type="number" class="form-control" id="distance" name="distance" 
-                                       value="<%= workout.distance || '' %>" min="0" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="distanceUnit">Unit</label>
-                                <select class="form-control" id="distanceUnit" name="distanceUnit">
-                                    <option value="km" <%= workout.distanceUnit === 'km' ? 'selected' : '' %>>Kilometers</option>
-                                    <option value="miles" <%= workout.distanceUnit === 'miles' ? 'selected' : '' %>>Miles</option>
-                                    <option value="meters" <%= workout.distanceUnit === 'meters' ? 'selected' : '' %>>Meters</option>
-                                    <option value="yards" <%= workout.distanceUnit === 'yards' ? 'selected' : '' %>>Yards</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 備註 -->
+                    <!-- Notes -->
                     <div class="form-group">
                         <label class="form-label" for="notes">Notes</label>
                         <textarea class="form-control" id="notes" name="notes" rows="3"><%= workout.notes || '' %></textarea>
@@ -231,25 +189,16 @@
     <script>
         // Only run JavaScript for edit mode
         <% if (mode === 'edit' && workout) { %>
-            // 監聽運動類型變化
-            document.getElementById('exerciseType').addEventListener('change', function(e) {
-                toggleSpecificFields(e.target.value);
-            });
-
-            // 表單提交
+            // Form submission
             document.getElementById('workoutForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
 
-                // 轉換數據類型
+                // Convert data types
                 data.duration = parseInt(data.duration);
                 data.caloriesBurned = parseInt(data.caloriesBurned);
-                data.sets = data.sets ? parseInt(data.sets) : undefined;
-                data.reps = data.reps ? parseInt(data.reps) : undefined;
-                data.weight = data.weight ? parseFloat(data.weight) : undefined;
-                data.distance = data.distance ? parseFloat(data.distance) : undefined;
 
                 const submitBtn = e.target.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
@@ -294,19 +243,12 @@
                     submitBtn.disabled = false;
                 }
             });
-
-            function toggleSpecificFields(type) {
-                document.getElementById('strengthFields').style.display = 
-                    type === 'strength' ? 'block' : 'none';
-                document.getElementById('cardioFields').style.display = 
-                    type === 'cardio' ? 'block' : 'none';
-            }
         <% } %>
 
         function goBack() {
             window.location.href = '/read';
         }
     </script>
-<%- include('partials/footer') %>
+    <%- include('partials/footer') %>
 </body>
 </html>
