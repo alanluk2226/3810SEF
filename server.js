@@ -1,52 +1,35 @@
-// server.js - Fixed for Render deployment
-console.log('🚀 Starting Fitness Tracker Server...');
-
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import express from 'express';
 import session from 'express-session';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// ES module equivalents for __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load environment variables FIRST
-dotenv.config();
+import User from './models/User.js';
+import Workout from './models/Workout.js';
 
 const app = express();
 
+app.use(express.static('public'));
+
 // Middleware
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Session middleware
+// Session middleware (required for authentication)
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'fallback-secret-key-change-in-production',
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 24 * 60 * 60 * 1000
     }
 }));
 
-// MongoDB connection - use environment variable
-const uri = process.env.MONGODB_URI || 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_workout_tracker?retryWrites=true&w=majority';
-const PORT = process.env.PORT || 8099;
+// MongoDB connection
+const uri = 'mongodb+srv://alanluk:projectTesting@cluster0.km9rij5.mongodb.net/fitness_workout_tracker?retryWrites=true&w=majority';
+const PORT = 8099;
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Import models
-import User from './models/User.js';
-import Workout from './models/Workout.js';
-
-console.log('✅ Models imported successfully');
 
 // Simple authentication middleware
 const requireAuth = (req, res, next) => {
@@ -663,12 +646,13 @@ app.delete('/api/workouts/:id', requireAuth, async (req, res) => {
 // Connect to MongoDB
 async function connectToDatabase() {
     try {
-        await mongoose.connect(uri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(uri);
         console.log('✅ Connected to MongoDB Atlas successfully!');
-        console.log('📊 Database:', mongoose.connection.name);
+        console.log('📊 Database: fitness_workout_tracker');
+        
+        // List collections to verify connection
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        console.log('📁 Available collections:', collections.map(c => c.name));
         
     } catch (error) {
         console.error('❌ MongoDB connection error:', error);
@@ -676,27 +660,10 @@ async function connectToDatabase() {
     }
 }
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error('Unhandled error:', err);
-    res.status(500).json({ 
-        success: false, 
-        error: 'Internal server error' 
-    });
-});
-
-// 404 handler
-app.use((req, res) => {
-    res.status(404).render('404', { 
-        title: 'Page Not Found',
-        user: req.session.user 
-    });
-});
-
 // Start server
-app.listen(PORT, '0.0.0.0', async () => {
+app.listen(PORT, async () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
-    console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`💾 Database: fitness_workout_tracker`);
     await connectToDatabase();
 });
