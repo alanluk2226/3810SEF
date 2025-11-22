@@ -399,7 +399,7 @@ app.delete('/api/workouts/:id', requireAuth, async (req, res) => {
 // Connect to MongoDB
 async function connectToDatabase() {
     try {
-        await mongoose.connect(uri); // ✅ Simplified - removes warnings
+        await mongoose.connect(url); // ✅ Simplified - removes warnings
         console.log('✅ Connected to MongoDB Atlas successfully!');
     } catch (error) {
         console.error('❌ MongoDB connection error:', error);
@@ -413,4 +413,5 @@ app.listen(PORT, async () => {
     console.log(`📍 Health check: http://localhost:${PORT}/api/health`);
     await connectToDatabase();
 });
+
 
