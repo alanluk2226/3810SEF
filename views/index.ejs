@@ -1,1 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Fitness App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-brand">🏋️ Fitness Tracker</div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/create" class="nav-link">Create Workout</a>
+                <a href="/read" class="nav-link">My Workouts</a>
+                <% if (user) { %>
+                    <div class="user-info">
+                        <span>Welcome, <%= user.username %>!</span>
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Login</a>
+                    <a href="/register" class="nav-link">Register</a>
+                <% } %>
+            </div>
+        </nav>
 
+        <!-- Main Content -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <h1 class="card-title">Welcome to Your Fitness Journey! 🏃‍♂️</h1>
+                <p>Track your workouts, achieve your goals, and transform your life.</p>
+            </div>
+
+            <div class="card-body">
+                <% if (user) { %>
+                    <!-- Authenticated User Content -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalWorkouts">0</div>
+                            <div class="stat-label">Total Workouts</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalCalories">0</div>
+                            <div class="stat-label">Calories Burned</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalDuration">0</div>
+                            <div class="stat-label">Minutes Trained</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="workoutStreak">0</div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <h3>Quick Actions</h3>
+                            <div class="quick-actions">
+                                <a href="/create" class="btn btn-primary">
+                                    <span>➕</span>
+                                    <span>Create New Workout</span>
+                                </a>
+                                <a href="/read" class="btn btn-success">
+                                    <span>📊</span>
+                                    <span>View My Workouts</span>
+                                </a>
+                                <a href="/update" class="btn btn-warning">
+                                    <span>✏️</span>
+                                    <span>Update Workouts</span>
+                                </a>
+                                <a href="/delete" class="btn btn-danger">
+                                    <span>🗑️</span>
+                                    <span>Delete Workouts</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h3>Recent Activity</h3>
+                            <div id="recentWorkouts">
+                                <p class="loading">Loading your recent workouts...</p>
+                            </div>
+                            
+                            <h3 style="margin-top: 2rem;">Workout Summary</h3>
+                            <div id="workoutSummary">
+                                <p class="loading">Loading your workout summary...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workout Suggestions -->
+                    <div style="margin-top: 3rem;">
+                        <h3>💪 Workout Suggestions</h3>
+                        <div id="workoutSuggestions" class="workout-suggestions">
+                            <div class="suggestion-card">
+                                <h4>Cardio Training</h4>
+                                <p>Running, Cycling, Swimming</p>
+                                <small>Burn calories and improve endurance</small>
+                            </div>
+                            <div class="suggestion-card">
+                                <h4>Strength Training</h4>
+                                <p>Weight Lifting, Bodyweight Exercises</p>
+                                <small>Build muscle and strength</small>
+                            </div>
+                            <div class="suggestion-card">
+                                <h4>Flexibility</h4>
+                                <p>Yoga, Stretching, Mobility</p>
+                                <small>Improve flexibility and recovery</small>
+                            </div>
+                        </div>
+                    </div>
+
+                <% } else { %>
+                    <!-- Unauthenticated User Content -->
+                    <div class="hero-section">
+                        <h2>Start Your Fitness Journey Today!</h2>
+                        <p>Join thousands of users tracking their workouts and achieving their fitness goals.</p>
+                        <div class="quick-actions" style="justify-content: center; max-width: 400px; margin: 0 auto;">
+                            <a href="/register" class="btn btn-primary">
+                                Get Started - It's Free!
+                            </a>
+                            <a href="/login" class="btn btn-success">
+                                I Already Have an Account
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h4>🎯 Track Progress</h4>
+                            <p>Monitor your workouts, calories burned, and fitness improvements over time.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>📊 View Analytics</h4>
+                            <p>Get detailed insights into your workout patterns and performance metrics.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🏆 Achieve Goals</h4>
+                            <p>Set personal fitness goals and track your journey to success.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h4>💪 Strength Training</h4>
+                            <p>Track weight lifting, sets, reps, and progressive overload.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🏃 Cardio Workouts</h4>
+                            <p>Monitor running, cycling, swimming and other cardio activities.</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>🧘 Flexibility & Recovery</h4>
+                            <p>Record yoga, stretching, and mobility sessions.</p>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user statistics
+        async function loadUserStats() {
+            try {
+                // Load workout data
+                const workoutsResponse = await fetch('/api/workouts');
+                const workoutsData = await workoutsResponse.json();
+                
+                if (workoutsData.success) {
+                    const workouts = workoutsData.workouts;
+                    const totalWorkouts = workouts.length;
+                    const totalCalories = workouts.reduce((sum, workout) => sum + (workout.caloriesBurned || 0), 0);
+                    const totalDuration = workouts.reduce((sum, workout) => sum + (workout.duration || 0), 0);
+                    
+                    // Calculate workout streak (simple version)
+                    const workoutStreak = calculateWorkoutStreak(workouts);
+                    
+                    document.getElementById('totalWorkouts').textContent = totalWorkouts;
+                    document.getElementById('totalCalories').textContent = totalCalories.toLocaleString();
+                    document.getElementById('totalDuration').textContent = totalDuration.toLocaleString();
+                    document.getElementById('workoutStreak').textContent = workoutStreak;
+                    
+                    // Display recent workouts
+                    const recentWorkouts = workouts.slice(0, 5);
+                    const recentContainer = document.getElementById('recentWorkouts');
+                    
+                    if (recentWorkouts.length > 0) {
+                        recentContainer.innerHTML = recentWorkouts.map(workout => `
+                            <div class="workout-card">
+                                <div class="workout-header">
+                                    <div class="workout-title">${workout.exerciseName || 'Workout'}</div>
+                                    <span style="color: var(--medium-text);">${new Date(workout.date).toLocaleDateString()}</span>
+                                </div>
+                                <div class="workout-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Duration</span>
+                                        <span>${workout.duration || 0} mins</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Calories</span>
+                                        <span>${workout.caloriesBurned || 0}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Type</span>
+                                        <span>${workout.exerciseType || 'General'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        recentContainer.innerHTML = '<div class="empty-state"><p>No workouts yet. <a href="/create">Create your first workout!</a></p></div>';
+                    }
+                    
+                    // Display workout summary
+                    const summaryContainer = document.getElementById('workoutSummary');
+                    if (workouts.length > 0) {
+                        const exerciseTypes = {};
+                        workouts.forEach(workout => {
+                            const type = workout.exerciseType || 'General';
+                            exerciseTypes[type] = (exerciseTypes[type] || 0) + 1;
+                        });
+                        
+                        const mostCommonType = Object.keys(exerciseTypes).reduce((a, b) => 
+                            exerciseTypes[a] > exerciseTypes[b] ? a : b
+                        );
+                        
+                        summaryContainer.innerHTML = `
+                            <div class="workout-card">
+                                <div class="workout-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Most Common</span>
+                                        <span>${mostCommonType}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Avg Duration</span>
+                                        <span>${Math.round(totalDuration / totalWorkouts)} mins</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Avg Calories</span>
+                                        <span>${Math.round(totalCalories / totalWorkouts)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        summaryContainer.innerHTML = '<div class="empty-state"><p>Start tracking to see your workout summary!</p></div>';
+                    }
+                } else {
+                    console.error('Failed to load workouts:', workoutsData.error);
+                    document.getElementById('recentWorkouts').innerHTML = '<div class="empty-state"><p>Error loading workouts. Please try again later.</p></div>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                document.getElementById('recentWorkouts').innerHTML = '<div class="empty-state"><p>Error loading workouts. Please try again later.</p></div>';
+            }
+        }
+
+        // Calculate workout streak (simple implementation)
+        function calculateWorkoutStreak(workouts) {
+            if (workouts.length === 0) return 0;
+            
+            // Get all workout dates and remove duplicates
+            const workoutDates = [...new Set(workouts.map(w => 
+                new Date(w.date).toDateString()
+            ))].sort((a, b) => new Date(b) - new Date(a));
+            
+            let streak = 0;
+            let currentDate = new Date();
+            
+            // Check consecutive days
+            for (let i = 0; i < workoutDates.length; i++) {
+                const workoutDate = new Date(workoutDates[i]);
+                const diffTime = currentDate - workoutDate;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === streak) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        // Load statistics if user is authenticated
+        <% if (user) { %>
+            document.addEventListener('DOMContentLoaded', loadUserStats);
+        <% } %>
+    </script>
+</body>
+</html>
