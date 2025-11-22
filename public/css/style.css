@@ -930,6 +930,27 @@ input[type="time"] {
     line-height: 1.5;
 }
 
+.footer {
+    background-color: #1a1a1a; /* Dark gray instead of pure black */
+    padding: 1rem 0;
+    text-align: center;
+    margin-top: 2rem;
+    border-top: 1px solid #333; /* Darker border */
+    width: 100%;
+    color: #ffffff; /* White text */
+}
+
+.footer .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer p {
+    color: #cccccc; /* Light gray text for better readability */
+    margin: 0;
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
