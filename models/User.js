@@ -1,4 +1,4 @@
-this is my User.js import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 // User Schema
 const userSchema = new mongoose.Schema({
