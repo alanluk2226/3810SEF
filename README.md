@@ -72,7 +72,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts \
   -b cookies.txt
    
 #6. UPDATE - Workout Operations
-curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c86add68748d8a17e29c \
+curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c7eddd68748d8a17e295 \
   -H "Content-Type: application/json" \
   -b cookies.txt \
   -d '{
@@ -97,10 +97,11 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts/suggestions \
   -b cookies.txt
   
 #10. DELETE - Workout Operations
-curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c86add68748d8a17e29c \
+curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c7eddd68748d8a17e295 \
   -b cookies.txt
   
 #11. DELETE - User Session Logout
 curl https://comp3810sef-group45-lxnz.onrender.com/logout \
   -b cookies.txt
+
 
