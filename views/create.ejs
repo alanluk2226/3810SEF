@@ -70,18 +70,6 @@
                         </div>
                     </div>
 
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="startTime">Start Time *</label>
-                            <input type="time" class="form-control" id="startTime" name="startTime" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="endTime">End Time *</label>
-                            <input type="time" class="form-control" id="endTime" name="endTime" required>
-                        </div>
-                    </div>
-
                     <!-- Calories and Intensity -->
                     <div class="form-section-header">Performance Metrics</div>
                     <div class="form-grid">
@@ -215,15 +203,6 @@
                 submitBtn.classList.remove('btn-loading');
             }
         });
-
-        // Set current time as default start time
-        const now = new Date();
-        const currentTime = now.toTimeString().slice(0, 5);
-        document.getElementById('startTime').value = currentTime;
-
-        // Calculate end time (default 1 hour later)
-        const endTime = new Date(now.getTime() + 60 * 60 * 1000);
-        document.getElementById('endTime').value = endTime.toTimeString().slice(0, 5);
     </script>
     <%- include('partials/footer') %>
 </body>
