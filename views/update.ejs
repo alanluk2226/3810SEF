@@ -1,1 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Fitness App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">🏋️ Fitness Tracker</div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/create" class="nav-link">Create Workout</a>
+                <a href="/read" class="nav-link">My Workouts</a>
+                <% if (user) { %>
+                    <div class="user-info">
+                        <span>Welcome, <%= user.username %>!</span>
+                        <a href="/logout" class="btn btn-danger">Logout</a>
+                    </div>
+                <% } else { %>
+                    <a href="/login" class="nav-link">Login</a>
+                <% } %>
+            </div>
+        </nav>
 
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
+                    <% if (mode === 'select') { %>
+                        Update Workout ✏️ - Select
+                    <% } else if (mode === 'edit') { %>
+                        Update Workout ✏️ - Edit
+                    <% } else { %>
+                        Update Workout ✏️
+                    <% } %>
+                </h1>
+                <p>
+                    <% if (mode === 'select') { %>
+                        Select a workout to update
+                    <% } else if (mode === 'edit') { %>
+                        Modify your workout details
+                    <% } else { %>
+                        Update your workouts
+                    <% } %>
+                </p>
+            </div>
+
+            <!-- Error Messages -->
+            <% if (error) { %>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="/update" class="btn btn-primary">Select Workout</a>
+                </div>
+            <% } %>
+
+            <!-- Workout Selection Mode -->
+            <% if (mode === 'select') { %>
+                <% if (workouts && workouts.length > 0) { %>
+                    <div class="workout-list">
+                        <% workouts.forEach(workout => { %>
+                            <div class="workout-item">
+                                <div class="workout-info">
+                                    <div class="workout-name">
+                                        <%= workout.exerciseName %>
+                                    </div>
+                                    <div class="workout-details">
+                                        <div class="workout-detail">
+                                            <strong>Type:</strong> <%= workout.exerciseType %>
+                                        </div>
+                                        <div class="workout-detail">
+                                            <strong>Date:</strong> <%= new Date(workout.date).toLocaleDateString() %>
+                                        </div>
+                                        <div class="workout-detail">
+                                            <strong>Duration:</strong> <%= workout.duration %> mins
+                                        </div>
+                                        <div class="workout-detail">
+                                            <strong>Calories:</strong> <%= workout.caloriesBurned %>
+                                        </div>
+                                        <% if (workout.intensity) { %>
+                                            <div class="workout-detail">
+                                                <strong>Intensity:</strong> <%= workout.intensity %>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <div class="workout-actions">
+                                    <a href="/update?id=<%= workout._id %>" class="btn btn-warning">
+                                        Edit Workout
+                                    </a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="no-workouts">
+                        <h3>No workouts found</h3>
+                        <p>You haven't created any workouts yet.</p>
+                        <a href="/create">Create your first workout</a>
+                    </div>
+                <% } %>
+            <% } %>
+
+            <!-- Edit Form Mode -->
+            <% if (mode === 'edit' && workout) { %>
+                <form id="workoutForm">
+                    <!-- 基本資訊 -->
+                    <div class="form-group">
+                        <label class="form-label" for="exerciseName">Exercise Name *</label>
+                        <input type="text" class="form-control" id="exerciseName" name="exerciseName" 
+                               value="<%= workout.exerciseName %>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="exerciseType">Exercise Type *</label>
+                        <select class="form-control" id="exerciseType" name="exerciseType" required>
+                            <option value="">Select exercise type</option>
+                            <option value="cardio" <%= workout.exerciseType === 'cardio' ? 'selected' : '' %>>Cardio</option>
+                            <option value="strength" <%= workout.exerciseType === 'strength' ? 'selected' : '' %>>Strength Training</option>
+                            <option value="flexibility" <%= workout.exerciseType === 'flexibility' ? 'selected' : '' %>>Flexibility</option>
+                            <option value="balance" <%= workout.exerciseType === 'balance' ? 'selected' : '' %>>Balance</option>
+                            <option value="high-intensity-interval-training" <%= workout.exerciseType === 'high-intensity-interval-training' ? 'selected' : '' %>>HIIT</option>
+                            <option value="sports" <%= workout.exerciseType === 'sports' ? 'selected' : '' %>>Sports</option>
+                            <option value="other" <%= workout.exerciseType === 'other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                    </div>
+
+                    <!-- 時間資訊 -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="date">Date *</label>
+                            <%
+                                const workoutDate = new Date(workout.date);
+                                const formattedDate = workoutDate.toISOString().split('T')[0];
+                            %>
+                            <input type="date" class="form-control" id="date" name="date" 
+                                   value="<%= formattedDate %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="duration">Duration (minutes) *</label>
+                            <input type="number" class="form-control" id="duration" name="duration" 
+                                   value="<%= workout.duration %>" min="1" required>
+                        </div>
+                    </div>
+
+                    <!-- 卡路里和強度 -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label class="form-label" for="caloriesBurned">Calories Burned *</label>
+                            <input type="number" class="form-control" id="caloriesBurned" name="caloriesBurned" 
+                                   value="<%= workout.caloriesBurned %>" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="intensity">Intensity</label>
+                            <select class="form-control" id="intensity" name="intensity">
+                                <option value="light" <%= workout.intensity === 'light' ? 'selected' : '' %>>Light</option>
+                                <option value="moderate" <%= workout.intensity === 'moderate' ? 'selected' : '' %>>Moderate</option>
+                                <option value="vigorous" <%= workout.intensity === 'vigorous' ? 'selected' : '' %>>Vigorous</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 運動特定細節 -->
+                    <div id="strengthFields" style="display: <%= workout.exerciseType === 'strength' ? 'block' : 'none' %>;">
+                        <h3 style="margin: 1.5rem 0 1rem 0;">Strength Training Details</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label" for="sets">Sets</label>
+                                <input type="number" class="form-control" id="sets" name="sets" 
+                                       value="<%= workout.sets || '' %>" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reps">Reps</label>
+                                <input type="number" class="form-control" id="reps" name="reps" 
+                                       value="<%= workout.reps || '' %>" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="weight">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" name="weight" 
+                                       value="<%= workout.weight || '' %>" min="0" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cardioFields" style="display: <%= workout.exerciseType === 'cardio' ? 'block' : 'none' %>;">
+                        <h3 style="margin: 1.5rem 0 1rem 0;">Cardio Details</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label class="form-label" for="distance">Distance</label>
+                                <input type="number" class="form-control" id="distance" name="distance" 
+                                       value="<%= workout.distance || '' %>" min="0" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="distanceUnit">Unit</label>
+                                <select class="form-control" id="distanceUnit" name="distanceUnit">
+                                    <option value="km" <%= workout.distanceUnit === 'km' ? 'selected' : '' %>>Kilometers</option>
+                                    <option value="miles" <%= workout.distanceUnit === 'miles' ? 'selected' : '' %>>Miles</option>
+                                    <option value="meters" <%= workout.distanceUnit === 'meters' ? 'selected' : '' %>>Meters</option>
+                                    <option value="yards" <%= workout.distanceUnit === 'yards' ? 'selected' : '' %>>Yards</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 備註 -->
+                    <div class="form-group">
+                        <label class="form-label" for="notes">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3"><%= workout.notes || '' %></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1;">
+                            Update Workout
+                        </button>
+                        <button type="button" onclick="goBack()" class="btn btn-danger" style="flex: 1;">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+
+                <div id="message" style="margin-top: 1rem;"></div>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        // Only run JavaScript for edit mode
+        <% if (mode === 'edit' && workout) { %>
+            // 監聽運動類型變化
+            document.getElementById('exerciseType').addEventListener('change', function(e) {
+                toggleSpecificFields(e.target.value);
+            });
+
+            // 表單提交
+            document.getElementById('workoutForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData.entries());
+
+                // 轉換數據類型
+                data.duration = parseInt(data.duration);
+                data.caloriesBurned = parseInt(data.caloriesBurned);
+                data.sets = data.sets ? parseInt(data.sets) : undefined;
+                data.reps = data.reps ? parseInt(data.reps) : undefined;
+                data.weight = data.weight ? parseFloat(data.weight) : undefined;
+                data.distance = data.distance ? parseFloat(data.distance) : undefined;
+
+                const submitBtn = e.target.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Updating...';
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch(`/api/workouts/<%= workout._id %>`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        document.getElementById('message').innerHTML = `
+                            <div style="color: green; text-align: center;">
+                                ✅ Workout updated successfully! Redirecting...
+                            </div>
+                        `;
+                        setTimeout(() => {
+                            window.location.href = '/read';
+                        }, 1500);
+                    } else {
+                        document.getElementById('message').innerHTML = `
+                            <div style="color: red; text-align: center;">
+                                ❌ Error: ${result.error || 'Failed to update workout'}
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    document.getElementById('message').innerHTML = `
+                        <div style="color: red; text-align: center;">
+                            ❌ Network error. Please try again.
+                        </div>
+                    `;
+                } finally {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+
+            function toggleSpecificFields(type) {
+                document.getElementById('strengthFields').style.display = 
+                    type === 'strength' ? 'block' : 'none';
+                document.getElementById('cardioFields').style.display = 
+                    type === 'cardio' ? 'block' : 'none';
+            }
+        <% } %>
+
+        function goBack() {
+            window.location.href = '/read';
+        }
+    </script>
+</body>
+</html>
