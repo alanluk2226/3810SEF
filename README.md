@@ -42,11 +42,11 @@ curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/login \
   -c cookies.txt \
   -d '{"username":"liulam1212","password":"liulam1212"}'
 
-# Get current user
+#  Read - Get current user
 curl https://comp3810sef-group45-lxnz.onrender.com/api/current-user \
   -b cookies.txt
 
-# Get all users (admin/testing)
+# Read - Get all users (admin/testing)
 curl https://comp3810sef-group45-lxnz.onrender.com/api/users \
   -b cookies.txt
   
@@ -72,7 +72,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts \
   -b cookies.txt
    
 #6. UPDATE - Workout Operations
-curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/69206411aecf0ead0937ecc5 \
+curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c86add68748d8a17e29c \
   -H "Content-Type: application/json" \
   -b cookies.txt \
   -d '{
@@ -97,9 +97,10 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts/suggestions \
   -b cookies.txt
   
 #10. DELETE - Workout Operations
-curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/671f58a9d3f4b8a1e4f5c678 \
+curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c86add68748d8a17e29c \
   -b cookies.txt
   
 #11. DELETE - User Session Logout
 curl https://comp3810sef-group45-lxnz.onrender.com/logout \
   -b cookies.txt
+
