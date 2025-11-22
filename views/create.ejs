@@ -101,44 +101,6 @@
                         </div>
                     </div>
 
-                    <!-- Exercise Specific Details -->
-                    <div id="strengthFields" style="display: none;">
-                        <div class="form-section-header">Strength Training Details</div>
-                        <div class="form-grid-3">
-                            <div class="form-group">
-                                <label class="form-label" for="sets">Sets</label>
-                                <input type="number" class="form-control" id="sets" name="sets" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="reps">Reps</label>
-                                <input type="number" class="form-control" id="reps" name="reps" min="0">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="weight">Weight (kg)</label>
-                                <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="cardioFields" style="display: none;">
-                        <div class="form-section-header">Cardio Details</div>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label" for="distance">Distance</label>
-                                <input type="number" class="form-control" id="distance" name="distance" min="0" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="distanceUnit">Unit</label>
-                                <select class="form-control" id="distanceUnit" name="distanceUnit">
-                                    <option value="km">Kilometers</option>
-                                    <option value="miles">Miles</option>
-                                    <option value="meters">Meters</option>
-                                    <option value="yards">Yards</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Notes -->
                     <div class="form-group">
                         <label class="form-label" for="notes">Notes</label>
@@ -189,15 +151,6 @@
                     suggestionsContainer.appendChild(div);
                 });
             }
-        });
-
-        // Show/hide fields based on exercise type
-        document.getElementById('exerciseType').addEventListener('change', function(e) {
-            const type = e.target.value;
-            document.getElementById('strengthFields').style.display = 
-                type === 'strength' ? 'block' : 'none';
-            document.getElementById('cardioFields').style.display = 
-                type === 'cardio' ? 'block' : 'none';
         });
 
         // Form submission
@@ -271,11 +224,7 @@
         // Calculate end time (default 1 hour later)
         const endTime = new Date(now.getTime() + 60 * 60 * 1000);
         document.getElementById('endTime').value = endTime.toTimeString().slice(0, 5);
-
-    <script src="/js/script.js"></script>
     </script>
-
-<%- include('partials/footer') %>
-
+    <%- include('partials/footer') %>
 </body>
 </html>
