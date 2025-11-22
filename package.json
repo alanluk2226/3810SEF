@@ -1,16 +1,22 @@
 {
   "name": "fitness",
   "description": "fitness workout tracking application",
-  "author": "Cloud", "_comment":" add the cloud server here(to be deleted) ",
+  "author": "Cloud",
   "version": "0.0.1",
+  "type": "module",
+  "main": "server.js",
   "dependencies": {
-    "express": "*",
-    "ejs": "*",
-    "passport": "*",
-    "express-session": "*"
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "mongoose": "^7.5.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1"
   },
-  "engine": "*",
   "scripts": {
-    "start": "node server"
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
