@@ -272,13 +272,10 @@
         const endTime = new Date(now.getTime() + 60 * 60 * 1000);
         document.getElementById('endTime').value = endTime.toTimeString().slice(0, 5);
 
-<footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 FitPlan Group Project. All rights reserved.</p>
-        </div>
-    </footer>
-    
     <script src="/js/script.js"></script>
     </script>
+
+<%- include('partials/footer') %>
+
 </body>
 </html>
