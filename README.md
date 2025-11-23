@@ -34,7 +34,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/health
 #2. CREATE - Register (use unique credentials if "testuser" exists)
 curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/signup \
   -H "Content-Type: application/json" \
-  -d '{"username":"amy12123","password":"amy12123","email":"amy12123@example.com"}'
+  -d '{"username":"amy121234","password":"amy121234","email":"amy121234@example.com"}'
   
 #3. READ - User Operations (Login)
 # Login
@@ -105,3 +105,17 @@ curl https://comp3810sef-group45-lxnz.onrender.com/logout \
   -b cookies.txt
 
 
+#Extra id testing for UPDATE&DELETE
+curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6922b1db1e69d03d65a26fec \
+  -H "Content-Type: application/json" \
+  -b cookies.txt \
+  -d '{
+    "exerciseName": "Updated Workout Name",
+    "duration": 50,
+    "caloriesBurned": 400,
+    "intensity": "vigorous",
+    "notes": "Updated notes"
+  }'
+  
+curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6922b1db1e69d03d65a26fec \
+-b cookies.txt
