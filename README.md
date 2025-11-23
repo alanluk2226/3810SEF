@@ -34,7 +34,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/health
 #2. CREATE - Register (use unique credentials if "testuser" exists)
 curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/signup \
   -H "Content-Type: application/json" \
-  -d '{"username":"amy1212","password":"amy1212","email":"amy1212@example.com"}'
+  -d '{"username":"amy12123","password":"amy12123","email":"amy12123@example.com"}'
   
 #3. READ - User Operations (Login)
 # Login
