@@ -26,6 +26,7 @@ CRUD API for managing workout records.
 Connect to MongoDB for the database service.
 
 
+https://comp3810sef-group45-lxnz.onrender.com
 
 #1. Health check
 curl https://comp3810sef-group45-lxnz.onrender.com/api/health
