@@ -37,7 +37,7 @@ Contains two files
 -create.ejs: A form for user to mark their workout record  
 -delete.ejs: Deletion that requires the user to confirm  
 -index.ejs: Display and summarize the workout  
--login.ejs: Authentication  
+-login.ejs: Authentication using cookies
 -read.ejs: Allow user to view, search, filter, and manage their exercise records  
 -register.ejs: New user can create a new account  
 -update.ejs: User can modify their record by the edit function  
