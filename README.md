@@ -102,7 +102,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts \
   -b cookies.txt
    
 #6. UPDATE - Workout Operations
-curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c7eddd68748d8a17e295 \
+curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620250 \
   -H "Content-Type: application/json" \
   -b cookies.txt \
   -d '{
@@ -126,7 +126,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts/suggestions \
   -b cookies.txt
   
 #10. DELETE - Workout Operations
-curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6921c7eddd68748d8a17e295 \
+curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620250 \
   -b cookies.txt
   
 #11. DELETE - User Session Logout
@@ -135,7 +135,7 @@ curl https://comp3810sef-group45-lxnz.onrender.com/logout \
 
 
 #Extra id testing for UPDATE&DELETE
-curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6922b1db1e69d03d65a26fec \
+curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620252 \
   -H "Content-Type: application/json" \
   -b cookies.txt \
   -d '{
@@ -146,5 +146,10 @@ curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6922b1db1
     "notes": "Updated notes"
   }'
   
-curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/6922b1db1e69d03d65a26fec \
+curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620252 \
 -b cookies.txt
+
+Anyother workout id for testing update and delete
+692009f19f89749242620254
+69200b059f8974924262025d
+69200b169f8974924262025f
