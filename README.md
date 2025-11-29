@@ -1,4 +1,4 @@
-<img width="552" height="377" alt="image" src="https://github.com/user-attachments/assets/8a06e34d-8a86-432a-9420-f73bbb4538db" />#1 Project Info
+#1 Project Info
 
 **Project Name**: 
 Server-Side Application --- **Fitness App**
@@ -64,6 +64,7 @@ User flow:
 
 
 -Use of Login/Logout pages
+<img width="398" height="704" alt="image" src="https://github.com/user-attachments/assets/32bc6e9b-8d6c-4d0b-b406-dd9a5571fbde" />
 In the login page, you can login if you already registered. Click create one here to do the registration. 
 Firstly, input the username(3-30 characters)
 Next, input your email with @
@@ -72,6 +73,7 @@ Then, input your password again to comfirm the password is same
 Finally, click the create account.
 -Logout button is a button to end an authericated session
 
+
 Valid login information: 
 Username: liulam123456  
 Password: 123456 
@@ -79,16 +81,27 @@ Or register a new account
 
 
 -Use of your CRUD web pages
+<img width="1113" height="1294" alt="image" src="https://github.com/user-attachments/assets/9b93c263-2661-455b-83b4-e5a6e4016833" />
 In the index page, there are quick actions that provied to user to click.
 -Create New Workout is a button to create new workout
+<img width="1106" height="1021" alt="image" src="https://github.com/user-attachments/assets/f9087856-1bcc-4c64-a012-bd44da88a8d1" />
+
 -View My Workouts is a button to read the workout
 	-Search Exercise(String)
 	-Exercise Type(drop down list)
 	-Date(Date)
  Edit and Delete funcitons are also available in read page
+ <img width="1096" height="795" alt="image" src="https://github.com/user-attachments/assets/6f5f6df6-74e5-4eac-87e1-3a52b26ee50a" />
+
 -Upate Workouts is a button to update workout
+<img width="1094" height="276" alt="image" src="https://github.com/user-attachments/assets/17cdbb49-d6a2-4b12-b6df-176cffed1078" />
+
 -Delete Workout is a button to delete workout
+<img width="1084" height="686" alt="image" src="https://github.com/user-attachments/assets/b5b2f178-9871-46a7-89a8-d3648d5efd71" />
+
 -Recent Activity, Workout Summary and Workout Suggestions are the UI that provided to user to read. Workout Summary summarize the avg duration, avg calories that user spent in the workouts.
+<img width="535" height="612" alt="image" src="https://github.com/user-attachments/assets/11f6ab39-1cd8-48c3-84fc-e2af782342f7" />
+<img width="1094" height="246" alt="image" src="https://github.com/user-attachments/assets/ffe857a2-b6aa-4cf2-a1af-eea1c7126d6e" />
 
 
 
