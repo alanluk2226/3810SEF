@@ -95,18 +95,19 @@ Or register a new account
 
 
 -Use of the CRUD web pages
+In the index page, there are quick actions that provied to user to click.
 <img width="1113" height="1294" alt="image" src="https://github.com/user-attachments/assets/9b93c263-2661-455b-83b4-e5a6e4016833" />
 
 
-In the index page, there are quick actions that provied to user to click.
+
 -Create New Workout is a button to create new workout
 <img width="1106" height="1021" alt="image" src="https://github.com/user-attachments/assets/f9087856-1bcc-4c64-a012-bd44da88a8d1" />
 
 
 -View My Workouts is a button to read the workout
-	-Search Exercise(String)
-	-Exercise Type(drop down list)
-	-Date(Date)
+	,Search Exercise(String)
+	,Exercise Type(drop down list)
+	,Date(Date)
  Edit and Delete funcitons are also available in read page
  <img width="1096" height="795" alt="image" src="https://github.com/user-attachments/assets/6f5f6df6-74e5-4eac-87e1-3a52b26ee50a" />
  
