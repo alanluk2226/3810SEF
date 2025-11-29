@@ -67,6 +67,9 @@ User flow:
 <img width="398" height="704" alt="image" src="https://github.com/user-attachments/assets/32bc6e9b-8d6c-4d0b-b406-dd9a5571fbde" />
 
 
+
+
+
 In the login page, you can login if you already registered. Click create one here to do the registration. 
 Firstly, input the username(3-30 characters)
 Next, input your email with @
@@ -108,7 +111,16 @@ In the index page, there are quick actions that provied to user to click.
 
 
 -Recent Activity, Workout Summary and Workout Suggestions are the UI that provided to user to read. Workout Summary summarize the avg duration, avg calories that user spent in the workouts.
+
+
+
+
+
+
 <img width="535" height="612" alt="image" src="https://github.com/user-attachments/assets/11f6ab39-1cd8-48c3-84fc-e2af782342f7" />
+
+
+
 
 
 <img width="1094" height="246" alt="image" src="https://github.com/user-attachments/assets/ffe857a2-b6aa-4cf2-a1af-eea1c7126d6e" />
