@@ -93,7 +93,7 @@ Password: 123456
 Or register a new account
 
 
--Use of your CRUD web pages
+-Use of the CRUD web pages
 <img width="1113" height="1294" alt="image" src="https://github.com/user-attachments/assets/9b93c263-2661-455b-83b4-e5a6e4016833" />
 
 
@@ -119,7 +119,6 @@ In the index page, there are quick actions that provied to user to click.
 
 
 -Recent Activity, Workout Summary and Workout Suggestions are the UI that provided to user to read. Workout Summary summarize the avg duration, avg calories that user spent in the workouts.
-
 
 
 
