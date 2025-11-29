@@ -1,4 +1,4 @@
-#1 Project Info
+<img width="552" height="377" alt="image" src="https://github.com/user-attachments/assets/8a06e34d-8a86-432a-9420-f73bbb4538db" />#1 Project Info
 
 **Project Name**: 
 Server-Side Application --- **Fitness App**
@@ -59,19 +59,49 @@ Contains two files
 https://comp3810sef-group45-lxnz.onrender.com/  
 
 #4 Operation guides
-Test acc:  
-Username: liulam123456  
-Password: 123456
+User flow:
 
-#1. Health check
+
+
+-Use of Login/Logout pages
+In the login page, you can login if you already registered. Click create one here to do the registration. 
+Firstly, input the username(3-30 characters)
+Next, input your email with @
+After that, input your password(min 6characters) for security reasons
+Then, input your password again to comfirm the password is same
+Finally, click the create account.
+-Logout button is a button to end an authericated session
+
+Valid login information: 
+Username: liulam123456  
+Password: 123456 
+Or register a new account
+
+
+-Use of your CRUD web pages
+In the index page, there are quick actions that provied to user to click.
+-Create New Workout is a button to create new workout
+-View My Workouts is a button to read the workout
+	-Search Exercise(String)
+	-Exercise Type(drop down list)
+	-Date(Date)
+ Edit and Delete funcitons are also available in read page
+-Upate Workouts is a button to update workout
+-Delete Workout is a button to delete workout
+-Recent Activity, Workout Summary and Workout Suggestions are the UI that provided to user to read. Workout Summary summarize the avg duration, avg calories that user spent in the workouts.
+
+
+
+-Use of your RESTful CRUD services:
+#4.1. Health check
 curl https://comp3810sef-group45-lxnz.onrender.com/api/health
 
-#2. CREATE - Register (use unique credentials if "testuser" exists)
+#4.2. CREATE - Register (use unique credentials if "testuser" exists)
 curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/signup \
   -H "Content-Type: application/json" \
   -d '{"username":"amy121234","password":"amy121234","email":"amy121234@example.com"}'
   
-#3. READ - User Operations (Login)
+#4.3. READ - User Operations (Login)
 # Login
 curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/login \
   -H "Content-Type: application/json" \
@@ -85,8 +115,9 @@ curl https://comp3810sef-group45-lxnz.onrender.com/api/current-user \
 # Read - Get all users (admin/testing)
 curl https://comp3810sef-group45-lxnz.onrender.com/api/users \
   -b cookies.txt
-  
-#4. CREATE - Workout Operations
+
+************Must login first, else cannot do the CRUD services********************
+#4.4. CREATE - Workout Operations
 # Create workout
 curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/workouts \
   -H "Content-Type: application/json" \
@@ -103,11 +134,11 @@ curl -X POST https://comp3810sef-group45-lxnz.onrender.com/api/workouts \
     "notes": "Good morning run in the park"
   }'
 
-#5. READ - Workout Operations (get all workouts)
+#4.5. READ - Workout Operations (get all workouts)
 curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts \
   -b cookies.txt
    
-#6. UPDATE - Workout Operations
+#4.6. UPDATE - Workout Operations
 curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620250 \
   -H "Content-Type: application/json" \
   -b cookies.txt \
@@ -119,26 +150,25 @@ curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19
     "notes": "Updated notes"
   }'
   
-#7. READ - Get Recent Activity
+#4.7. READ - Get Recent Activity
 curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts/recent \
   -b cookies.txt
   
-#8. READ - Get Workout Statistics
+#4.8. READ - Get Workout Statistics
 curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts/stats \
   -b cookies.txt
   
-#9. READ - Get Workout Suggestions
+#4.9. READ - Get Workout Suggestions
 curl https://comp3810sef-group45-lxnz.onrender.com/api/workouts/suggestions \
   -b cookies.txt
   
-#10. DELETE - Workout Operations
+#4.10. DELETE - Workout Operations
 curl -X DELETE https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620250 \
   -b cookies.txt
   
-#11. DELETE - User Session Logout
+#4.11. DELETE - User Session Logout
 curl https://comp3810sef-group45-lxnz.onrender.com/logout \
   -b cookies.txt
-
 
 #Extra id testing for UPDATE&DELETE
 curl -X PUT https://comp3810sef-group45-lxnz.onrender.com/api/workouts/692009f19f89749242620252 \
@@ -159,3 +189,4 @@ Anyother workout id for testing update and delete
 692009f19f89749242620254
 69200b059f8974924262025d
 69200b169f8974924262025f
+
