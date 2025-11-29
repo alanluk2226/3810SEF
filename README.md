@@ -58,21 +58,17 @@ Contains two files
 #3 The cloud-based server URL：
 https://comp3810sef-group45-lxnz.onrender.com/  
 
+
+
 #4 Operation guides
 User flow:
-
-
+<img width="1114" height="1060" alt="image" src="https://github.com/user-attachments/assets/c8881832-48a8-4fce-807d-a0806a250a33" />
 
 
 
 
 -Use of Login/Logout pages
-
-
-
-
 <img width="398" height="704" alt="image" src="https://github.com/user-attachments/assets/32bc6e9b-8d6c-4d0b-b406-dd9a5571fbde" />
-
 
 
 In the login page, you can login if you already registered. Click create one here to do the registration. 
