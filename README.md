@@ -67,8 +67,12 @@ User flow:
 
 
 
+
+
 -Use of Login/Logout pages
 <img width="398" height="704" alt="image" src="https://github.com/user-attachments/assets/32bc6e9b-8d6c-4d0b-b406-dd9a5571fbde" />
+
+
 
 
 
