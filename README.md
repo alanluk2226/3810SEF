@@ -78,11 +78,12 @@ User flow:
 
 
 In the login page, you can login if you already registered. Click create one here to do the registration. 
-Firstly, input the username(3-30 characters)
-Next, input your email with @
-After that, input your password(min 6characters) for security reasons
-Then, input your password again to comfirm the password is same
-Finally, click the create account.
+-Firstly, input the username(3-30 characters)
+-Next, input your email with @
+-After that, input your password(min 6characters) for security reasons
+-Then, input your password again to comfirm the password is same
+-Finally, click the create account.
+
 -Logout button is a button to end an authericated session
 
 
